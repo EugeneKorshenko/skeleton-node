@@ -8,6 +8,7 @@
         "noImplicitAny": false,
         "removeComments": true,
         "sourceMap": false,
+        "experimentalDecorators": true,
         "outDir": "server/dist/",
         "typeRoots": [ "node_modules/@types" ]
     }

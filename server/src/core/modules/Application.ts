@@ -1,5 +1,5 @@
 import * as express from "express";
-import {Request, Response, Application} from "express";
+import {Request, Response, Router} from "express";
 import * as session from "express-session";
 import * as path from "path";
 import * as compression from "compression";
@@ -8,22 +8,17 @@ import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import Settings from "../interfaces/Settings";
-import MorganRequestLogger from '../modules/MorganRequestLogger';
+import MorganRequestLogger from "../modules/MorganRequestLogger";
+import CoreApplication from "./base/CoreApplication";
+import Methods from './base/CoreHttpMethods';
 
-class CoreApplication {
+export default class Application extends CoreApplication {
 
-    private app: Application = null;
-    private parameters = null;
     private requestLogger: MorganRequestLogger = null;
 
     constructor(settings: Settings) {
-        this.app = express();
-        this.parameters = settings.get();
+        super(settings);
         this.requestLogger = new MorganRequestLogger();
-    }
-
-    private injectMiddlware(middlware) {
-        this.app.use(middlware);
     }
 
     public initialize() {
@@ -33,7 +28,7 @@ class CoreApplication {
 
         // uncomment after placing your favicon in /public
         // this.app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-        this.injectMiddlware(this.requestLogger.middleware());
+        this.injectMiddlware(this.requestLogger);
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(cookieParser());
@@ -51,14 +46,28 @@ class CoreApplication {
         this.app.use(compression());
         this.app.use(express.static(path.join(__dirname, "public")));
 
-        this.app.use("/", (req: Request, res: Response) => {
-            res.render("index", {
-                title: "Express"
-            });
-        });
+        //@todo: Need to be improved!
+        this.controllers.forEach((controller) => {
+            let router: Router = Router();
+            controller.routing.forEach((route) => {
+                let method = null;
 
-        this.app.use("/users", (req: Request, res: Response) => {
-            res.send("respond with a resource");
+                switch (route.method) {
+                    case Methods.GET:
+                        method = 'get'; break;
+                    case Methods.POST:
+                        method = 'post'; break;
+                    case Methods.PUT:
+                        method = 'put'; break;
+                    case Methods.DELETE:
+                        method = 'delete'; break;
+                    default:
+                        throw new Error('Method not allowed: ' + route.method);
+                }
+
+               router[method](route.route, controller[route.action]);
+            });
+            this.app.use(controller.baseUrl, router);
         });
 
         // catch 404 and forward to error handler
@@ -87,5 +96,3 @@ class CoreApplication {
     }
 
 }
-
-export default CoreApplication;

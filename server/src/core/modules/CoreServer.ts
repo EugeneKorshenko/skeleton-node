@@ -1,6 +1,6 @@
-import CoreApplication from '../modules/CoreApplication';
-import Settings from '../interfaces/Settings';
-import * as http from 'http';
+import CoreApplication from "./Application";
+import Settings from "../interfaces/Settings";
+import * as http from "http";
 
 export default class CoreServer {
 
@@ -16,27 +16,27 @@ export default class CoreServer {
     public start() {
         this.serverInstance
             .listen(this.parameters.server.port)
-            .on('error', this.onError.bind(this))
-            .on('listening', this.onListening.bind(this));
+            .on("error", this.onError.bind(this))
+            .on("listening", this.onListening.bind(this));
     }
 
     private onError(error) {
-        if (error.syscall !== 'listen') {
+        if (error.syscall !== "listen") {
             throw error;
         }
 
-        const bind = typeof this.parameters.server.port === 'string'
-            ? 'Pipe ' + this.parameters.server.port
-            : 'Port ' + this.parameters.server.port;
+        const bind = typeof this.parameters.server.port === "string"
+            ? "Pipe " + this.parameters.server.port
+            : "Port " + this.parameters.server.port;
 
         // handle specific listen errors with friendly messages
         switch (error.code) {
-            case 'EACCES':
-                console.error(bind + ' requires elevated privileges');
+            case "EACCES":
+                console.error(bind + " requires elevated privileges");
                 process.exit(1);
                 break;
-            case 'EADDRINUSE':
-                console.error(bind + ' is already in use');
+            case "EADDRINUSE":
+                console.error(bind + " is already in use");
                 process.exit(1);
                 break;
             default:
@@ -46,9 +46,9 @@ export default class CoreServer {
 
     private onListening() {
         const addr = this.serverInstance.address();
-        const bind = typeof addr === 'string'
-            ? 'pipe ' + addr
-            : 'port ' + addr.port;
-        console.log('Listening on ' + bind);
+        const bind = typeof addr === "string"
+            ? "pipe " + addr
+            : "port " + addr.port;
+        console.log("Listening on " + bind);
     }
 }

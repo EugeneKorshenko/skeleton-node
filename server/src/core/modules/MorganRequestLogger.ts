@@ -1,10 +1,11 @@
 import RequestLogger from "../interfaces/RequestLogger";
 import * as morgan from "morgan";
+import Middleware from "../interfaces/Middleware";
 
-export default class MorganRequestLogger implements RequestLogger {
+export default class MorganRequestLogger implements RequestLogger, Middleware {
     constructor() {}
 
-    middleware() {
-        return morgan("combined");
+    extractMiddleware() {
+        return morgan("dev");
     }
 }

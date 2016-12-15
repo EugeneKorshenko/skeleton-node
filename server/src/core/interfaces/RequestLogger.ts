@@ -1,9 +1,9 @@
-interface middleware {
+interface Middleware {
     () : any;
 }
 
 interface RequestLogger {
-    middleware: middleware
+    extractMiddleware: Middleware;
 }
 
 export default RequestLogger;
