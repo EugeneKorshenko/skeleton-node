@@ -1,5 +1,5 @@
 import CoreApplication from "./Application";
-import Settings from "../interfaces/Settings";
+import ISettings from "../interfaces/ISettings";
 import * as http from "http";
 
 export default class CoreServer {
@@ -7,7 +7,7 @@ export default class CoreServer {
     private parameters = null;
     private serverInstance = null;
 
-    constructor(application: CoreApplication, settings: Settings) {
+    constructor(application: CoreApplication, settings: ISettings) {
         const app = application.getExpressInstance();
         this.parameters = settings.get();
         this.serverInstance = http.createServer(app);

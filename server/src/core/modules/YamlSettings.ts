@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as yaml from "js-yaml";
-import Settings from "../interfaces/Settings";
+import ISettings from "../interfaces/ISettings";
 import CoreSettings from "./base/CoreSettings";
 
-export default class YamlSettings extends CoreSettings implements Settings {
+export default class YamlSettings extends CoreSettings implements ISettings {
 
     constructor(source: string) {
         super();

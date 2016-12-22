@@ -1,10 +1,10 @@
-import Settings from "../../interfaces/Settings";
+import ISettings from "../../interfaces/ISettings";
 
 /**
  * Virtual class
  */
 
-abstract class CoreSettings implements Settings {
+abstract class CoreSettings implements ISettings {
 
     protected settingsData: any = null;
 

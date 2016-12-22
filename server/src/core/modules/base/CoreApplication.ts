@@ -1,7 +1,7 @@
 import * as express from "express";
 import {Application} from "express";
-import Middleware from "../../interfaces/Middleware";
-import Settings from "../../interfaces/Settings";
+import IMiddleware from "../../interfaces/IMiddleware";
+import ISettings from "../../interfaces/ISettings";
 import CoreController from "./CoreController";
 
 export default class CoreApplication {
@@ -9,12 +9,12 @@ export default class CoreApplication {
     protected parameters = null;
     protected controllers : Array<CoreController> = [];
 
-    constructor(settings: Settings) {
+    constructor(settings: ISettings) {
         this.app = express();
         this.parameters = settings.get();
     }
 
-    protected injectMiddlware(mw: Middleware) {
+    protected injectMiddlware(mw: IMiddleware) {
         this.app.use(mw.extractMiddleware());
     }
 

@@ -1,27 +1,36 @@
-import CoreController from "../core/modules/base/CoreController";
-import Methods from '../core/modules/base/CoreHttpMethods';
-import {BaseUrl, Route} from "../core/modules/base/CoreDecorators";
 import {Request, Response} from "express";
+import CoreController from "../core/modules/base/CoreController";
+import {Controller, Route, Middleware, Use} from "../core/modules/base/CoreExpressDecorators";
+import Methods from "../core/modules/base/CoreHttpMethods";
+const {GET, POST} = Methods;
 
-@BaseUrl("/index")
+@Controller('/')
 export default class IndexController extends CoreController {
-    constructor() {
-        super();
+
+    @Use
+    public async allAction(req: Request, res: Response, next: Function) {
+        return next();
     }
 
-    @Route(Methods.GET, '/')
-    indexAction(req: Request, res: Response) {
-        res.send({
+    @Route(GET,'/')
+    @Middleware('logMiddleware')
+    public async indexAction(req: Request, res: Response) {
+        return res.send({
             controller: 'index',
             action: 'get'
         });
     }
 
-    @Route(Methods.POST, '/')
-    addAction(req: Request, res: Response) {
-        res.send({
+    @Route(POST, '/')
+    public async addAction(req: Request, res: Response) {
+        return res.send({
             controller: 'index',
             action: 'post'
         });
+    }
+
+    private async logMiddleware(req: Request, res: Response, next: Function) {
+        console.warn(new Date());
+        return next();
     }
 }

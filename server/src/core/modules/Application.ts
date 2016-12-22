@@ -7,16 +7,16 @@ import * as favicon from "serve-favicon";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
-import Settings from "../interfaces/Settings";
+import ISettings from "../interfaces/ISettings";
 import MorganRequestLogger from "../modules/MorganRequestLogger";
 import CoreApplication from "./base/CoreApplication";
-import Methods from './base/CoreHttpMethods';
+import IController from "../interfaces/IController";
 
 export default class Application extends CoreApplication {
 
     private requestLogger: MorganRequestLogger = null;
 
-    constructor(settings: Settings) {
+    constructor(settings: ISettings) {
         super(settings);
         this.requestLogger = new MorganRequestLogger();
     }
@@ -46,28 +46,8 @@ export default class Application extends CoreApplication {
         this.app.use(compression());
         this.app.use(express.static(path.join(__dirname, "public")));
 
-        //@todo: Need to be improved!
-        this.controllers.forEach((controller) => {
-            let router: Router = Router();
-            controller.routing.forEach((route) => {
-                let method = null;
-
-                switch (route.method) {
-                    case Methods.GET:
-                        method = 'get'; break;
-                    case Methods.POST:
-                        method = 'post'; break;
-                    case Methods.PUT:
-                        method = 'put'; break;
-                    case Methods.DELETE:
-                        method = 'delete'; break;
-                    default:
-                        throw new Error('Method not allowed: ' + route.method);
-                }
-
-               router[method](route.route, controller[route.action]);
-            });
-            this.app.use(controller.baseUrl, router);
+        this.controllers.forEach((controller: IController) => {
+            controller.register(this.app);
         });
 
         // catch 404 and forward to error handler
@@ -88,8 +68,6 @@ export default class Application extends CoreApplication {
             return res.render("error");
         });
     }
-
-
 
     public getExpressInstance() {
         return this.app;

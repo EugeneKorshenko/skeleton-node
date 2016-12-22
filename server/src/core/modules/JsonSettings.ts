@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import Settings from "../interfaces/Settings";
+import ISettings from "../interfaces/ISettings";
 import CoreSettings from "./base/CoreSettings";
 
-export default class JsonSettings extends CoreSettings implements Settings {
+export default class JsonSettings extends CoreSettings implements ISettings {
 
     constructor(source: string) {
         super();
