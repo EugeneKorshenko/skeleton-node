@@ -1,5 +1,5 @@
 import * as express from "express";
-import {Request, Response, Router} from "express";
+import {Request, Response, Router, NextFunction} from "express";
 import * as session from "express-session";
 import * as path from "path";
 import * as compression from "compression";
@@ -11,6 +11,8 @@ import ISettings from "../interfaces/ISettings";
 import MorganRequestLogger from "../modules/MorganRequestLogger";
 import CoreApplication from "./base/CoreApplication";
 import IController from "../interfaces/IController";
+import IError from "../interfaces/IError";
+import IErrorHandler from "../interfaces/IErrorHandler";
 
 export default class Application extends CoreApplication {
 
@@ -23,7 +25,7 @@ export default class Application extends CoreApplication {
 
     public initialize() {
         // view engine setup
-        this.app.set("views", this.parameters.view.path);
+        this.app.set("views", path.join(__dirname, this.parameters.view.path));
         this.app.set("view engine", this.parameters.view.engine);
 
         // uncomment after placing your favicon in /public
@@ -51,14 +53,14 @@ export default class Application extends CoreApplication {
         });
 
         // catch 404 and forward to error handler
-        this.app.use(function(req: Request, res: Response, next: any) {
-            let err: any = new Error("Not Found");
+        this.app.use(function(req: Request, res: Response, next: NextFunction) {
+            let err: IError = new Error("Not Found");
             err.status = 404;
             next(err);
         });
 
         // error handler
-        this.app.use(function(err: any, req: Request, res: Response, next: any) {
+        let errorHandler: IErrorHandler = function(err: IError, req: Request, res: Response, next: NextFunction) {
             // set locals, only providing error in development
             res.locals.message = err.message;
             res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -66,7 +68,9 @@ export default class Application extends CoreApplication {
             // render the error page
             res.status(err.status || 500);
             return res.render("error");
-        });
+        };
+
+        this.app.use(errorHandler);
     }
 
     public getExpressInstance() {
