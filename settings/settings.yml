@@ -1,7 +1,7 @@
 server:
   port: 3000
 view:
-  path: '/Users/eugene/workspace/experiments/skeleton-node/server/views'
+  path: '../../../views'
   engine: 'jade'
 session:
   secret: '293828736g27f63g'
