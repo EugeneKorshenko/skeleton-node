@@ -1,3 +1,6 @@
+declare function require(name: string);
+require('source-map-support').install();
+
 import CoreServer from "./core/modules/CoreServer";
 import Application from "./core/modules/Application";
 import YamlSettings from "./core/modules/YamlSettings";
