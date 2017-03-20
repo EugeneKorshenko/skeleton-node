@@ -1,5 +1,5 @@
 interface ISettings {
-    get: Function;
+  get: Function
 }
 
 export default ISettings;

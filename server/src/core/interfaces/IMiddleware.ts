@@ -1,5 +1,5 @@
 interface IMiddleware {
-    extractMiddleware: Function;
+  extractMiddleware: Function
 }
 
 export default IMiddleware;

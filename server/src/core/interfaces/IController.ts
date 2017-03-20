@@ -1,5 +1,5 @@
 interface IController {
-    register: Function
+  register: Function
 }
 
 export default IController;

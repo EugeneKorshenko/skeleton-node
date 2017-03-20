@@ -1,5 +1,5 @@
 interface IRequestLogger {
-    extractMiddleware: Function;
+  extractMiddleware: Function
 }
 
 export default IRequestLogger;

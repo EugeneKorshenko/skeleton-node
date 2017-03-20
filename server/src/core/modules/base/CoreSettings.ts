@@ -1,4 +1,4 @@
-import ISettings from "../../interfaces/ISettings";
+import ISettings from '../../interfaces/ISettings';
 
 /**
  * Virtual class
@@ -6,13 +6,11 @@ import ISettings from "../../interfaces/ISettings";
 
 abstract class CoreSettings implements ISettings {
 
-    protected settingsData: any = null;
+  protected settingsData: any = null;
 
-    constructor() {}
-
-    public get() {
-        return this.settingsData;
-    }
+  public get () {
+    return this.settingsData;
+  }
 }
 
 export default CoreSettings;

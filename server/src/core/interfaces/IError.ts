@@ -1,5 +1,5 @@
 interface IError extends Error {
-    status?: number;
+  status?: number
 }
 
 export default IError;
