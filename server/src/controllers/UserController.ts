@@ -5,7 +5,7 @@ import Methods from '../core/modules/base/CoreHttpMethods';
 const {GET, POST, PATCH, DELETE} = Methods;
 
 @Controller('/user')
-export default class UserController extends CoreController {
+class UserController extends CoreController {
 
   @Route(GET, '/')
   public async listAction (req: Request, res: Response) {
@@ -38,3 +38,5 @@ export default class UserController extends CoreController {
     res.send('');
   }
 }
+
+export default new UserController();

@@ -2,7 +2,7 @@ import CoreApplication from './Application';
 import ISettings from '../interfaces/ISettings';
 import * as http from 'http';
 
-export default class CoreServer {
+export default class CoreHttpServer {
 
   private parameters = null;
   private serverInstance = null;

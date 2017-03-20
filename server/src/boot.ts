@@ -1,18 +1,11 @@
-import CoreServer from './core/modules/CoreServer';
+import CoreHttpServer from './core/modules/CoreHttpServer';
 import Application from './core/modules/Application';
 import YamlSettings from './core/modules/YamlSettings';
-import IndexController from './controllers/IndexController';
-import UserController from './controllers/UserController';
+import controllers from './controllers';
 
 const settings: YamlSettings = new YamlSettings('./settings/settings.yml');
-const application: Application = new Application(settings);
-const server: CoreServer = new CoreServer(application, settings);
-
-const ic: IndexController = new IndexController();
-const uc: UserController = new UserController();
-
-application.attachController(ic);
-application.attachController(uc);
+const application: Application = new Application(settings, controllers);
+const server: CoreHttpServer = new CoreHttpServer(application, settings);
 
 application.initialize();
 

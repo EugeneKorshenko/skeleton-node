@@ -9,16 +9,18 @@ import * as helmet from 'helmet';
 import ISettings from '../interfaces/ISettings';
 import MorganRequestLogger from '../modules/MorganRequestLogger';
 import CoreApplication from './base/CoreApplication';
+import CoreController from './base/CoreController';
 import IController from '../interfaces/IController';
 import IError from '../interfaces/IError';
 import IErrorHandler from '../interfaces/IErrorHandler';
+import IHashTable from '../interfaces/IHashTable';
 
 export default class Application extends CoreApplication {
 
   private requestLogger: MorganRequestLogger = null;
 
-  constructor (settings: ISettings) {
-    super(settings);
+  constructor (settings: ISettings, controllers: IHashTable<CoreController>) {
+    super(settings, controllers);
     this.requestLogger = new MorganRequestLogger();
   }
 

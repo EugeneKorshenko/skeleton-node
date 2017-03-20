@@ -5,7 +5,7 @@ import Methods from '../core/modules/base/CoreHttpMethods';
 const {GET, POST} = Methods;
 
 @Controller('/')
-export default class IndexController extends CoreController {
+class IndexController extends CoreController {
 
   @Use
   public async allAction (req: Request, res: Response, next: Function) {
@@ -34,3 +34,5 @@ export default class IndexController extends CoreController {
     return next();
   }
 }
+
+export default new IndexController();
