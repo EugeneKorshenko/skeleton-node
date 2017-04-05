@@ -1,4 +1,3 @@
-import * as express from 'express';
 import {Request, Response, NextFunction} from 'express';
 import * as session from 'express-session';
 import * as path from 'path';
@@ -6,20 +5,19 @@ import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
-import ISettings from '../interfaces/ISettings';
-import MorganRequestLogger from '../modules/MorganRequestLogger';
-import CoreApplication from './base/CoreApplication';
-import CoreController from './base/CoreController';
-import IController from '../interfaces/IController';
-import IError from '../interfaces/IError';
-import IErrorHandler from '../interfaces/IErrorHandler';
-import IHashTable from '../interfaces/IHashTable';
+import MorganRequestLogger from './core/modules/MorganRequestLogger';
+import CoreApplication from './core/modules/base/CoreApplication';
+import ISettings from './core/interfaces/ISettings';
+import IController from './core/interfaces/IController';
+import IError from './core/interfaces/IError';
+import IErrorHandler from './core/interfaces/IErrorHandler';
+import IHashTable from './core/interfaces/IHashTable';
 
 export default class Application extends CoreApplication {
 
   private requestLogger: MorganRequestLogger = null;
 
-  constructor (settings: ISettings, controllers: IHashTable<CoreController>) {
+  constructor (settings: ISettings, controllers: IHashTable<IController>) {
     super(settings, controllers);
     this.requestLogger = new MorganRequestLogger();
   }
@@ -27,7 +25,7 @@ export default class Application extends CoreApplication {
   public initialize () {
     this.app.set('views', path.join(__dirname, this.parameters.view.path));
     this.app.set('view engine', this.parameters.view.engine);
-    this.injectMiddlware(this.requestLogger);
+    this.injectMiddleware(this.requestLogger);
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({extended: false}));
     this.app.use(cookieParser());
@@ -43,7 +41,6 @@ export default class Application extends CoreApplication {
       }
     }));
     this.app.use(compression());
-    this.app.use(express.static(path.join(__dirname, 'public')));
 
     this.controllers.forEach((controller: IController) => {
       controller.register(this.app);
@@ -69,9 +66,4 @@ export default class Application extends CoreApplication {
 
     this.app.use(errorHandler);
   }
-
-  public getExpressInstance () {
-    return this.app;
-  }
-
 }

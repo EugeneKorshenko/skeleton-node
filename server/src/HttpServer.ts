@@ -1,20 +1,22 @@
-import CoreApplication from './Application';
-import ISettings from '../interfaces/ISettings';
 import * as http from 'http';
+import {Application as ExpressApplication} from 'express';
+import {EventEmitter} from 'events';
+import ISettings from './core/interfaces/ISettings';
+import IApplication from './core/interfaces/IApplication';
 
-export default class CoreHttpServer {
+export default class HttpServer {
 
   private parameters = null;
   private serverInstance = null;
 
-  constructor (application: CoreApplication, settings: ISettings) {
-    const app = application.getExpressInstance();
+  constructor (application: IApplication, settings: ISettings) {
+    const app: ExpressApplication = application.getExpressInstance();
     this.parameters = settings.get();
     this.serverInstance = http.createServer(app);
   }
 
-  public start () {
-    this.serverInstance
+  public start (): EventEmitter {
+    return this.serverInstance
       .listen(this.parameters.server.port)
       .on('error', this.onError.bind(this))
       .on('listening', this.onListening.bind(this));
